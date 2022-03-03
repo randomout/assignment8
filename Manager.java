@@ -17,7 +17,7 @@ public class Manager {
 
     File files[] = this.directory.listFiles();
 
-    if(files == null) {
+    if(files == null || files.length == 0) {
       this.directory = null;
       throw new FileNotFoundException("No media files found in directory: " + directory.getAbsolutePath());
     }

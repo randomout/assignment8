@@ -68,23 +68,7 @@ public class MediaRentalSystem extends JFrame {
 
     ActionListener searchListener = new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        if(manager.getAllMedia().size() == 0) {
-          // TODO: no media to search!
-        }
-
-        String searchText = searchField.getText();
-
-        ArrayList<Media> media = manager.find(searchText);
-
-        System.out.println(media.size());
-        
-        if(media.size() == 0) {
-          //TODO: no media found
-          return;
-        }
-
-        tableModel.setMedia(media);
-        updateColumns();
+        searchMedia();
       }
     };
 
@@ -93,9 +77,7 @@ public class MediaRentalSystem extends JFrame {
 
     clearButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        searchField.setText("");
-        tableModel.setMedia(manager.getAllMedia());
-        updateColumns();
+        clearSearch();
       }
     });
 
@@ -120,10 +102,10 @@ public class MediaRentalSystem extends JFrame {
 
         updateColumns();
       }  catch(FileNotFoundException fnf) {
-        // TODO
+        JOptionPane.showMessageDialog(this, fnf.getMessage());
         fnf.printStackTrace();
       } catch(MediaCreationException mc) {
-        // TODO
+        JOptionPane.showMessageDialog(this, mc.getMessage());
         mc.printStackTrace();
       }
     }
@@ -140,6 +122,32 @@ public class MediaRentalSystem extends JFrame {
     model.getColumn(5).setPreferredWidth(200);
   }
 
+  private void searchMedia() {
+    if(manager.getAllMedia().size() == 0) {
+      JOptionPane.showMessageDialog(this, "No media to search! Load media first!");
+    }
+
+    String searchText = searchField.getText();
+
+    ArrayList<Media> media = manager.find(searchText);
+
+    System.out.println(media.size());
+    
+    if(media.size() == 0) {
+      JOptionPane.showMessageDialog(this, "No media was found matching this title");
+      return;
+    }
+
+    tableModel.setMedia(media);
+    updateColumns();
+  }
+
+  private void clearSearch() {
+    searchField.setText("");
+    tableModel.setMedia(manager.getAllMedia());
+    updateColumns();
+  }
+  
   private void closeApplication() {
     this.dispose();
   }

@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.Writer;
 import java.text.DecimalFormat;
 
 public class MovieDVD extends Media {
@@ -17,7 +19,12 @@ public class MovieDVD extends Media {
       throw new MediaCreationException("Incorrect MovieDVD format");
     }
 
-    this.size = Double.parseDouble(segements[4]);
+    try {
+      this.size = Double.parseDouble(segements[4]);
+    } catch( NumberFormatException e ) {
+      throw new MediaCreationException("Unable to read media: " + e.getMessage());
+    }
+    
   }
 
   public void setSize(double size) {
@@ -32,5 +39,11 @@ public class MovieDVD extends Media {
     DecimalFormat format = new DecimalFormat("#0.00");
     return "size: " + format.format(this.size) + "MB";
   }
+
+  public void save(Writer writer) throws IOException {
+    super.save(writer);
+    writer.write("," + this.size);
+  }
+
   
 }

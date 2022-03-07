@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Calendar;;
 
 public class MusicCD extends Media {
@@ -19,7 +21,11 @@ public class MusicCD extends Media {
       throw new MediaCreationException("Incorrect MusicCD format");
     }
 
-    this.length = Integer.parseInt(segements[4]);
+    try {
+      this.length = Integer.parseInt(segements[4]);
+    } catch( NumberFormatException e ) {
+      throw new MediaCreationException("Unable to read media: " + e.getMessage());
+    }
   }
 
   public void setLength(int length) {
@@ -44,6 +50,11 @@ public class MusicCD extends Media {
     }
 
     return fee;
+  }
+
+  public void save(Writer writer) throws IOException {
+    super.save(writer);
+    writer.write("," + this.length);
   }
 
   

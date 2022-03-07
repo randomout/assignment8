@@ -21,10 +21,14 @@ public abstract class Media {
       throw new MediaCreationException("Incorrect media data format");
     }
 
-    this.id = Integer.parseInt(segements[0]);
-    this.title = segements[1];
-    this.yearPublished = Integer.parseInt(segements[2]);
-    this.rented = Boolean.parseBoolean(segements[3]);
+    try {
+      this.id = Integer.parseInt(segements[0]);
+      this.title = segements[1];
+      this.yearPublished = Integer.parseInt(segements[2]);
+      this.rented = Boolean.parseBoolean(segements[3]);
+    } catch( Exception e ) {
+      throw new MediaCreationException("Unable to read media: " + e.getMessage());
+    }
   }
 
   public Media(int id, String title, int yearPublished, boolean rented) {
@@ -75,6 +79,15 @@ public abstract class Media {
       "title: " + this.title + ", " +
       "year published: " + this.yearPublished + ", " +
       "rented: " + this.rented;
+  }
+
+  public void save(Writer writer) throws IOException{
+    writer.write(
+      this.id + "," +
+      this.title + "," +
+      this.yearPublished + "," +
+      this.rented
+    );
   }
 
   public static final Media createMedia(File file) throws MediaCreationException {

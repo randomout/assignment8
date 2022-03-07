@@ -42,7 +42,7 @@ public class Manager {
 
   }
 
-  public void save(Media media) throws FileNotFoundException {
+  public void save(Media media) throws FileNotFoundException, IOException {
     if(this.directory == null) {
       throw new FileNotFoundException("No directory available to save");
     }
@@ -50,7 +50,8 @@ public class Manager {
     File file = new File(this.directory, media.getClass().getSimpleName() + "-" + media.getId() + ".txt");
     PrintWriter out = new PrintWriter(file);
 
-    out.println(media.toString());
+    media.save(out);
+
     out.close();
   }
 
@@ -58,7 +59,9 @@ public class Manager {
     try {
       save(media);
       this.media.add(media);
-    } catch(FileNotFoundException e) {
+    } catch( FileNotFoundException e ) {
+      throw new MediaUpdateException("Unable to add media: " + e.getMessage());
+    } catch( IOException e ) {
       throw new MediaUpdateException("Unable to add media: " + e.getMessage());
     }
   }
@@ -84,6 +87,14 @@ public class Manager {
     return this.media;
   }
 
+  public Media get(int index) throws MediaNotFoundException {
+    if(this.media != null && this.media.size() > 0) {
+      return this.media.get(index);
+    }
+
+    throw new MediaNotFoundException("No media available at index: " + index);
+  }
+
   public double rent(int id) throws MediaNotFoundException, MediaUpdateException {
     Media rental = null;
     
@@ -103,6 +114,8 @@ public class Manager {
     try {
       save(rental);
     } catch( FileNotFoundException e ) {
+      throw new MediaUpdateException("Unable to update media: " + e.getMessage());
+    } catch( IOException e ) {
       throw new MediaUpdateException("Unable to update media: " + e.getMessage());
     }
     

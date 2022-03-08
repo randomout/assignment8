@@ -152,9 +152,9 @@ public class MediaRentalSystem extends JFrame {
       selection = JOptionPane.showConfirmDialog(this, message, "Rent Media", JOptionPane.YES_NO_OPTION);
   
       if(selection == JOptionPane.YES_OPTION) {
-        manager.rent(media.getId());
+        double fee = manager.rent(media.getId());
         DecimalFormat format = new DecimalFormat("$#0.00");
-        JOptionPane.showMessageDialog(this, "Media Rental Price: " + format.format(media.caculateRentalFee()));
+        JOptionPane.showMessageDialog(this, "Media Rental Price: " + format.format(fee));
       }
     } catch(MediaNotFoundException e) {
       JOptionPane.showMessageDialog(this, "Unable to select media: " + e.getMessage());

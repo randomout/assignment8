@@ -158,10 +158,8 @@ public class MediaRentalSystem extends JFrame {
         updateColumns();
       }  catch(FileNotFoundException fnf) {
         JOptionPane.showMessageDialog(this, fnf.getMessage());
-        fnf.printStackTrace();
       } catch(MediaCreationException mc) {
         JOptionPane.showMessageDialog(this, mc.getMessage());
-        mc.printStackTrace();
       }
     }
   }
